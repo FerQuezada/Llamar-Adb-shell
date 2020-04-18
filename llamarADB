@@ -1,0 +1,100 @@
+from subprocess import check_call, check_output
+# from opcionesMarcar import local, national, international, emergency
+import opcionesMarcar
+import time
+import datetime
+import argparse
+from uiautomator import Device
+import pytz
+
+
+def readserial():
+
+    output = check_output(['adb', 'devices'])
+
+    lines = output.splitlines()
+    firstDev = lines[1].split()[0]
+
+
+
+    print ("1st Device on List = {}".format(firstDev))
+
+    return firstDev
+
+
+def devname():
+    a = readserial()
+    deviceName = str(a)
+    return deviceName
+
+def lee_entero():
+    while True:
+        entrada = raw_input("What do you want to do? ")
+        try:
+            entrada = int(entrada)
+            return entrada
+        except ValueError:
+            print "Not a valid option"
+
+
+def colgar():
+
+    while True:
+        answer = raw_input("Make another call? press y")
+        if answer == "y":
+            check_call(['adb', 'shell', 'input', 'keyevent 6'])
+            return 1
+        elif answer != "":
+            exit()
+            print "Not a valid option"
+
+
+def entero():
+    while True:
+        any = raw_input("Press any number to end call")
+        try:
+            any = int(any)
+            return any
+        except ValueError:
+            print "Not a valid option"
+
+
+
+while (1):
+    a = devname()
+    print(a)
+
+    print("1 Local number")
+    print("2 National number")
+    print("3 International number")
+    print("4 Emergency number")
+
+    while True:
+        entrada = lee_entero()
+        if entrada == 1:
+            opcionesMarcar.local(a)
+            break
+        elif entrada == 2:
+            opcionesMarcar.national(a)
+            break
+        elif entrada == 3:
+            opcionesMarcar.international(a)
+            break
+        elif entrada == 4:
+            opcionesMarcar.emergency(a)
+            break
+        else:
+            print("Not a valid option")
+
+
+
+    # print("Enter a phone number to call")
+
+    # print()
+    respuesta = colgar()
+    # print("Want to finish? press 1")
+    # answer = raw_input("Want to make another call? press any number")
+    # respuesta = entero(answer)
+
+    if respuesta == '1':
+        exit()
